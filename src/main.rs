@@ -1,44 +1,26 @@
 use std::io::{self, stdin, BufRead,};
 
+use helpers::get_input;
+
 use crate::helpers::{costperround, tax_per_state, total_cost, States};
 mod helpers;
 
 fn main() {
     let mut stop = false;
 while !stop {
-    // Takes an input for the amount of boxes and parses the users input into a float so math can be performed on it!
+
     println!("Input the number of boxes:");
-    let mut boxes = String::new();
-    io::stdin()
-        .read_line(&mut boxes)
-        .expect("Failed to read line");
-    let boxes: f64 = boxes.trim().parse().unwrap();
+    let boxes = get_input();
 
-    // Takes an input for the amount of rounds per box and parses the users input into a float so math can be performed on it!
     println!("Input the number of rounds per box:");
-    let mut rounds = String::new();
-    io::stdin()
-        .read_line(&mut rounds)
-        .expect("Failed to read line");
-    let rounds: f64 = rounds.trim().parse().unwrap();
+    let rounds = get_input();
 
-    // Takes an input for the cost per box and parses the users input into a float so math can be performed on it!
     println!("What is the cost per box?");
-    let mut price_per_box = String::new();
-    io::stdin()
-        .read_line(&mut price_per_box)
-        .expect("Failed to read line");
-    let priceperbox: f64 = price_per_box.trim().parse().unwrap();
+    let priceperbox = get_input();
 
-    // Takes an input for the cost of shipping and parses the users input into a float so math can be performed on it!
     println!("What is the shipping cost?");
-    let mut shipping = String::new();
-    stdin()
-        .read_line(&mut shipping)
-        .expect("Failed to read input");
-    let shipping: f64 = shipping.trim().parse().unwrap();
+    let shipping = get_input();
 
-    // Takes an input from the user on if the website charges sales tax and stores the user response in the tax variable
     println!("Does the website charge tax?");
     let mut tax = String::new();
     io::stdin()
@@ -58,11 +40,7 @@ while !stop {
             .unwrap();
         input = input.to_uppercase();
         let which_state = States::from_str(input.trim()).unwrap();  //Calls on the from_str function to transform the users input to an enum value 
-
-        // USE YOUR RETURN TYPES AND DONT JUST CALL A FUNCTION FOR NO REASON
-        tax_rate = tax_per_state(which_state); // This function passes in the which_state that we used to 
-
-
+        tax_rate = tax_per_state(which_state); // This function passes in the which_state variable that we collected from the user
     }
 
     let total_rounds = boxes * rounds;
@@ -70,12 +48,20 @@ while !stop {
     costperround(total, total_rounds);
 
     println!("Would you like to run the program again?");
-    let run_again = String::new();
-    if run_again.to_uppercase() == "YES" {
-      stop = false;
-    }
+    let mut run_again = String::new();
+    stdin()
+    .read_line(&mut run_again)
+    .expect("Failed to read input");
+
+    match run_again.trim().to_uppercase().as_str() {
+       "YES" => stop = false,
+       "NO" => stop = true,
+       _ => stop = true,
         
     }
+        
+    }// while loop end
+
 
 
 }

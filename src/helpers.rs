@@ -1,3 +1,5 @@
+use std::{io::stdin, f64};
+
 pub enum States {
     AL,
     MT,
@@ -177,3 +179,27 @@ impl States {
         }
     }
 }
+
+//This is the function that is called upon to take an input from the user and assign it to a specified variable
+//in the main function while simultaneously handling errors and repeating the question if an invalid response is recieved.
+pub fn get_input() -> f64 {
+    let mut valid = false;
+    let mut val: f64 = 0.0;
+    'check: while !valid {
+        let mut input = String::new();
+        stdin().read_line(&mut input).expect("Failed to read input");
+        val = match input.trim().parse() { //Parses the users input and declares a match statement
+            Ok(num) => {  //Makes sure the users input is of type f64
+                valid = true; //If the users input is of the correct type this breaks the loop
+                num //Returns the number
+            },
+            Err(_) => {
+                println!("Invalid input, try again!");
+                continue 'check //This continue allows the program to prompt the user for a response again after an invalid input
+            }
+        }
+    }
+    return val;
+            
+}
+
