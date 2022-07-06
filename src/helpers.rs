@@ -1,4 +1,4 @@
-use std::{io::stdin, f64};
+use std::{f64, io::stdin};
 
 pub enum States {
     AL,
@@ -51,6 +51,40 @@ pub enum States {
     WI,
     MO,
     WY,
+}
+
+// Login Function that I created. Not really needed for this program but decided to add it to sharpen my skills!
+pub fn quick_login() {
+    let mut correct_user_name = false;
+    let mut correct_password = false;
+    let mut stop = false;
+    'login: while !stop {
+        println!("Enter your username:");
+        let mut username = String::new();
+        stdin()
+            .read_line(&mut username)
+            .expect("Failed to read input!");
+        println!("Enter your password:");
+        let mut password = String::new();
+        stdin()
+            .read_line(&mut password)
+            .expect("Failed to read input!");
+
+        if username.trim().to_uppercase() == "MKASEM" {
+            correct_user_name = true;
+        }
+        if password.trim() == "testPassword" {
+            correct_password = true;
+        }
+
+        if correct_user_name && correct_password == true {
+            stop = true;
+            println!("Login Success!")
+        } else {
+            println!("Login credentials are incorrect! Please try again!");
+            continue 'login;
+        }
+    } // loop end
 }
 
 pub fn tax_per_state(state: States) -> f64 {
@@ -122,8 +156,9 @@ pub fn costperround(total: f64, totalrounds: f64) {
 #[derive(Debug)]
 pub struct InputError;
 
+// This matches the users input to an enum of the matching state!
 impl States {
-     pub fn from_str(s: &str) -> Result<States, InputError> {
+    pub fn from_str(s: &str) -> Result<States, InputError> {
         match s {
             "AL" => Ok(States::AL),
             "MT" => Ok(States::MT),
@@ -188,18 +223,18 @@ pub fn get_input() -> f64 {
     'check: while !valid {
         let mut input = String::new();
         stdin().read_line(&mut input).expect("Failed to read input");
-        val = match input.trim().parse() { //Parses the users input and declares a match statement
-            Ok(num) => {  //Makes sure the users input is of type f64
+        val = match input.trim().parse() {
+            //Parses the users input and declares a match statement
+            Ok(num) => {
+                //Makes sure the users input is of type f64
                 valid = true; //If the users input is of the correct type this breaks the loop
                 num //Returns the number
-            },
+            }
             Err(_) => {
                 println!("Invalid input, try again!");
-                continue 'check //This continue allows the program to prompt the user for a response again after an invalid input
+                continue 'check; //This continue allows the program to prompt the user for a response again after an invalid input
             }
         }
     }
     return val;
-            
 }
-
